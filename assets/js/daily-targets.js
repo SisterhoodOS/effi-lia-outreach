@@ -8,7 +8,7 @@ Effi.dailyTargets = (function () {
 
   function fmtDateLabel(dateStr) {
     const d = new Date(dateStr + 'T00:00:00');
-    return d.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+    return d.toLocaleDateString('en-US', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
   }
 
   async function ensureSlotsExist(project, dateStr) {
@@ -34,7 +34,7 @@ Effi.dailyTargets = (function () {
 
   function renderProgress() {
     const done = slots.filter(s => s.done).length;
-    document.getElementById('targets-progress').textContent = `${done}/${SLOT_COUNT} selesai`;
+    document.getElementById('targets-progress').textContent = `${done}/${SLOT_COUNT} done`;
   }
 
   function renderGrid(readOnly) {
@@ -44,7 +44,7 @@ Effi.dailyTargets = (function () {
       .map(s => `
         <div class="target-slot ${s.done ? 'done' : ''}" data-id="${s.id}">
           <span class="target-slot-num">${s.slot_number}</span>
-          <input type="text" value="${Effi.util.escapeHtml(s.client_name || '')}" placeholder="nama target..." data-id="${s.id}" ${readOnly ? 'disabled' : ''}>
+          <input type="text" value="${Effi.util.escapeHtml(s.client_name || '')}" placeholder="target name..." data-id="${s.id}" ${readOnly ? 'disabled' : ''}>
           <input type="checkbox" ${s.done ? 'checked' : ''} data-id="${s.id}" ${readOnly ? 'disabled' : ''}>
         </div>
       `).join('');
@@ -57,8 +57,8 @@ Effi.dailyTargets = (function () {
     const dates = [...new Set(rows.map(r => r.target_date))].sort().reverse();
     const today = Effi.util.todayISODate();
     select.innerHTML = dates.map(d =>
-      `<option value="${d}">${d === today ? 'Hari ini' : d}</option>`
-    ).join('') || `<option value="${today}">Hari ini</option>`;
+      `<option value="${d}">${d === today ? 'Today' : d}</option>`
+    ).join('') || `<option value="${today}">Today</option>`;
     select.value = today;
   }
 

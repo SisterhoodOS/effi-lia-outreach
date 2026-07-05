@@ -45,7 +45,7 @@ Effi.clients = (function () {
           <div class="client-card-name">${Effi.util.escapeHtml(c.name)}</div>
           <div class="client-card-meta">
             ${Effi.util.escapeHtml(c.source || '-')}
-            ${c.profile_link ? ` &middot; <a href="${Effi.util.escapeHtml(c.profile_link)}" target="_blank" rel="noopener">link profile</a>` : ''}
+            ${c.profile_link ? ` &middot; <a href="${Effi.util.escapeHtml(c.profile_link)}" target="_blank" rel="noopener">profile link</a>` : ''}
             ${c.handled_by ? ` &middot; handled by ${Effi.util.escapeHtml(c.handled_by)}` : ''}
             ${c.meeting_at ? ` &middot; meeting: ${Effi.util.formatDateTime(c.meeting_at)}` : ''}
           </div>
@@ -54,7 +54,7 @@ Effi.clients = (function () {
         <div class="client-card-actions">
           <span class="status-badge status-${c.status}">${STATUS_LABELS[c.status]}</span>
           <select class="client-status-select" data-id="${c.id}">${statusOptionsHtml(c.status)}</select>
-          ${c.status === 'booked' ? `<button class="btn btn-ghost btn-sm client-view-detail" data-id="${c.id}">Lihat Detail</button>` : ''}
+          ${c.status === 'booked' ? `<button class="btn btn-ghost btn-sm client-view-detail" data-id="${c.id}">View Detail</button>` : ''}
           <button class="btn btn-ghost btn-sm client-edit" data-id="${c.id}">Edit</button>
         </div>
       </div>
@@ -64,20 +64,20 @@ Effi.clients = (function () {
   function formHtml(client) {
     const c = client || { name: '', source: '', profile_link: '', note: '', handled_by: '' };
     return `
-      <h2 class="detail-title">${client ? 'Edit' : 'Tambah'} Client</h2>
-      <label>Nama</label>
+      <h2 class="detail-title">${client ? 'Edit' : 'Add'} Client</h2>
+      <label>Name</label>
       <input type="text" id="cf-name" value="${Effi.util.escapeHtml(c.name)}">
-      <label>Dari mana (source)</label>
+      <label>Source</label>
       <input type="text" id="cf-source" value="${Effi.util.escapeHtml(c.source)}">
-      <label>Link profile</label>
+      <label>Profile link</label>
       <input type="text" id="cf-link" value="${Effi.util.escapeHtml(c.profile_link)}" placeholder="https://instagram.com/...">
-      <label>Handled by (opsional)</label>
+      <label>Handled by (optional)</label>
       <input type="text" id="cf-handled" value="${Effi.util.escapeHtml(c.handled_by)}">
       <label>Note</label>
       <textarea id="cf-note">${Effi.util.escapeHtml(c.note)}</textarea>
       <div class="action-row">
-        <button class="btn btn-primary" id="cf-save">Simpan</button>
-        ${client ? '<button class="btn btn-danger" id="cf-delete">Hapus</button>' : ''}
+        <button class="btn btn-primary" id="cf-save">Save</button>
+        ${client ? '<button class="btn btn-danger" id="cf-delete">Delete</button>' : ''}
       </div>
     `;
   }
@@ -121,11 +121,11 @@ Effi.clients = (function () {
     if (!client) return;
 
     if (newStatus === 'booked') {
-      const dt = prompt('Jam meeting client ini? (format: YYYY-MM-DD HH:MM, contoh 2026-07-10 14:00)');
+      const dt = prompt('What time is the meeting with this client? (format: YYYY-MM-DD HH:MM, e.g. 2026-07-10 14:00)');
       if (!dt) return; // cancel = don't change status
       const meetingAt = new Date(dt.replace(' ', 'T'));
       if (isNaN(meetingAt.getTime())) {
-        alert('Format tanggal/jam tidak valid, coba lagi ya.');
+        alert('Invalid date/time format, please try again.');
         return;
       }
       const updated = await Effi.db.updateRow('effi_clients', id, {

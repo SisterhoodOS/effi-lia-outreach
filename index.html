@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <title>Effi Lia - Outreach</title>
@@ -17,12 +17,12 @@
 
 <div id="auth-gate" class="auth-gate">
   <div class="auth-gate-card">
-    <p class="auth-gate-eyebrow">Sisterhood OS</p>
+    <p class="auth-gate-eyebrow">Saha Synergy</p>
     <h1 class="auth-gate-title">Effi Lia <span>- Outreach</span></h1>
-    <p class="auth-gate-sub">Masukkan password tim buat masuk ✨</p>
+    <p class="auth-gate-sub">Enter the team password to get in ✨</p>
     <input type="password" id="auth-gate-input" class="auth-gate-input" placeholder="Password">
-    <button id="auth-gate-submit" class="btn btn-primary btn-block">Masuk</button>
-    <p id="auth-gate-error" class="auth-gate-error" hidden>Password salah, coba lagi ya.</p>
+    <button id="auth-gate-submit" class="btn btn-primary btn-block">Enter</button>
+    <p id="auth-gate-error" class="auth-gate-error" hidden>Wrong password, try again.</p>
   </div>
 </div>
 
@@ -31,13 +31,13 @@
   <header class="app-header">
     <h1 class="app-title">Effi Lia <span>- Outreach</span></h1>
     <div class="header-actions">
-      <button id="template-editor-btn" class="btn btn-ghost">Edit Template</button>
+      <button id="template-editor-btn" class="btn btn-ghost">Edit Templates</button>
       <div class="notif-bell-wrap">
-        <button id="notif-bell-btn" class="notif-bell-btn" title="Notifikasi">
+        <button id="notif-bell-btn" class="notif-bell-btn" title="Notifications">
           🔔<span id="notif-bell-badge" class="notif-badge" hidden>0</span>
         </button>
         <div id="notif-panel" class="notif-panel" hidden>
-          <div class="notif-panel-header">Notifikasi</div>
+          <div class="notif-panel-header">Notifications</div>
           <div id="notif-list" class="notif-list"></div>
         </div>
       </div>
@@ -59,7 +59,7 @@
           <h2 id="targets-date-label" class="targets-date-label"></h2>
           <span id="targets-progress" class="targets-progress"></span>
           <select id="targets-history-select" class="targets-history-select">
-            <option value="">Hari ini</option>
+            <option value="">Today</option>
           </select>
         </div>
         <div id="targets-grid" class="targets-grid"></div>
@@ -68,18 +68,18 @@
 
     <section class="clients-section">
       <div class="clients-toolbar">
-        <input type="text" id="clients-search" class="clients-search" placeholder="Cari nama client...">
+        <input type="text" id="clients-search" class="clients-search" placeholder="Search client name...">
         <select id="clients-status-filter" class="clients-status-filter">
-          <option value="">Semua status</option>
+          <option value="">All statuses</option>
           <option value="no_response">No Response</option>
           <option value="response">Response</option>
           <option value="interest">Interest</option>
           <option value="not_interest">Not Interest</option>
           <option value="booked">Booked</option>
         </select>
-        <button id="add-client-btn" class="btn btn-primary">+ Tambah Client</button>
+        <button id="add-client-btn" class="btn btn-primary">+ Add Client</button>
       </div>
-      <div id="clients-empty" class="clients-empty" hidden>Belum ada client di project ini. Klik "+ Tambah Client" buat mulai 🤍</div>
+      <div id="clients-empty" class="clients-empty" hidden>No clients in this project yet. Click "+ Add Client" to get started 🤍</div>
       <div id="clients-list" class="clients-list"></div>
     </section>
 

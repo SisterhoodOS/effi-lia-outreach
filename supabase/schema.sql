@@ -73,15 +73,15 @@ create policy "anon full access" on effi_notifications for all using (true) with
 create policy "anon full access" on effi_templates for all using (true) with check (true);
 
 insert into effi_templates (project, kind, body)
-select null, 'client_6h', 'Hai {{name}}! Cuma mau ingetin, kita ada meeting hari ini jam {{time}}. Sampai ketemu nanti ya 🤍'
+select null, 'client_6h', 'Hi {{name}}! Just a reminder, we have a meeting today at {{time}}. See you soon 🤍'
 where not exists (select 1 from effi_templates where project is null and kind = 'client_6h');
 
 insert into effi_templates (project, kind, body)
-select null, 'client_1h', 'Hai {{name}}, 1 jam lagi meeting kita jam {{time}}. Sampai jumpa sebentar lagi!'
+select null, 'client_1h', 'Hi {{name}}, our meeting is in 1 hour at {{time}}. See you shortly!'
 where not exists (select 1 from effi_templates where project is null and kind = 'client_1h');
 
 insert into effi_templates (project, kind, body)
-select null, 'sophia_6h', 'Reminder: meeting sama {{name}} ({{project}}) jam {{time}} (6 jam lagi). Report lengkap ada di Effi Lia - Outreach.'
+select null, 'sophia_6h', 'Reminder: meeting with {{name}} ({{project}}) at {{time}} (in 6 hours). Full report is in Effi Lia - Outreach.'
 where not exists (select 1 from effi_templates where project is null and kind = 'sophia_6h');
 
 -- Reminder scan: every 15 minutes, insert notification rows for booked

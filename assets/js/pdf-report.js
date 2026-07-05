@@ -52,12 +52,12 @@ window.EffiPDF = (function () {
       y += 22;
     }
 
-    sectionTitle('Profil');
-    y = wrapText(doc, `Nama: ${client.name || '-'}`, margin, y, pageWidth - margin * 2, 14);
-    y = wrapText(doc, `Sumber: ${client.source || '-'}`, margin, y, pageWidth - margin * 2, 14);
-    y = wrapText(doc, `Link profile: ${client.profile_link || '-'}`, margin, y, pageWidth - margin * 2, 14);
+    sectionTitle('Profile');
+    y = wrapText(doc, `Name: ${client.name || '-'}`, margin, y, pageWidth - margin * 2, 14);
+    y = wrapText(doc, `Source: ${client.source || '-'}`, margin, y, pageWidth - margin * 2, 14);
+    y = wrapText(doc, `Profile link: ${client.profile_link || '-'}`, margin, y, pageWidth - margin * 2, 14);
     const meetingStr = client.meeting_at
-      ? new Date(client.meeting_at).toLocaleString('id-ID', { dateStyle: 'medium', timeStyle: 'short' })
+      ? new Date(client.meeting_at).toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' })
       : '-';
     y = wrapText(doc, `Meeting: ${meetingStr}`, margin, y, pageWidth - margin * 2, 14);
     y += 10;
@@ -77,7 +77,7 @@ window.EffiPDF = (function () {
     sectionTitle('Suggested Approach');
     const approach = client.note
       ? client.note
-      : 'Approach dengan ramah, dengarkan kebutuhan mereka, dan sampaikan value sesuai hasil riset di atas.';
+      : 'Approach warmly, listen to their needs, and communicate value based on the research above.';
     y = wrapText(doc, approach, margin, y, pageWidth - margin * 2, 14);
 
     const safeName = (client.name || 'client').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');

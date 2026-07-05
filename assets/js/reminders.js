@@ -3,9 +3,9 @@
 
 Effi.reminders = (function () {
   const TEMPLATE_KINDS = [
-    { kind: 'client_6h', label: 'Client — 6 jam sebelum meeting' },
-    { kind: 'client_1h', label: 'Client — 1 jam sebelum meeting' },
-    { kind: 'sophia_6h', label: 'Sophia — 6 jam sebelum meeting' }
+    { kind: 'client_6h', label: 'Client — 6 hours before meeting' },
+    { kind: 'client_1h', label: 'Client — 1 hour before meeting' },
+    { kind: 'sophia_6h', label: 'Sophia — 6 hours before meeting' }
   ];
 
   let pollTimer = null;
@@ -28,14 +28,14 @@ Effi.reminders = (function () {
 
     const list = document.getElementById('notif-list');
     if (notifications.length === 0) {
-      list.innerHTML = '<div class="notif-empty">Belum ada notifikasi.</div>';
+      list.innerHTML = '<div class="notif-empty">No notifications yet.</div>';
       return;
     }
     list.innerHTML = notifications.slice(0, 30).map(n => `
       <div class="notif-item" data-id="${n.id}">
         <div>${n.audience === 'sophia' ? '👑 ' : ''}${Effi.util.escapeHtml(n.message)}</div>
         <div class="notif-item-time">${Effi.util.formatDateTime(n.created_at)}</div>
-        ${!n.seen ? `<button class="notif-item-mark" data-id="${n.id}">Tandai sudah dibaca</button>` : ''}
+        ${!n.seen ? `<button class="notif-item-mark" data-id="${n.id}">Mark as read</button>` : ''}
       </div>
     `).join('');
   }
@@ -49,8 +49,8 @@ Effi.reminders = (function () {
 
   function templateBodyHtml(templates) {
     return `
-      <h2 class="detail-title">Edit Template Pesan</h2>
-      <p class="field-hint">Placeholder yang bisa dipakai: {{name}}, {{time}}, {{project}}</p>
+      <h2 class="detail-title">Edit Message Templates</h2>
+      <p class="field-hint">Placeholders you can use: {{name}}, {{time}}, {{project}}</p>
       ${TEMPLATE_KINDS.map(({ kind, label }) => {
         const existing = templates.find(t => t.kind === kind && t.project === Effi.state.activeProject)
           || templates.find(t => t.kind === kind && !t.project);
@@ -60,7 +60,7 @@ Effi.reminders = (function () {
         `;
       }).join('')}
       <div class="action-row">
-        <button class="btn btn-primary" id="tpl-save">Simpan Template</button>
+        <button class="btn btn-primary" id="tpl-save">Save Templates</button>
       </div>
     `;
   }

@@ -35,12 +35,12 @@ window.Effi = {
     formatDateTime(iso) {
       if (!iso) return '';
       const d = new Date(iso);
-      return d.toLocaleString('id-ID', { dateStyle: 'medium', timeStyle: 'short' });
+      return d.toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' });
     },
     formatTime(iso) {
       if (!iso) return '';
       const d = new Date(iso);
-      return d.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+      return d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
     },
     openModal(id) {
       document.getElementById(id).hidden = false;

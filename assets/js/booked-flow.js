@@ -17,32 +17,32 @@ Effi.bookedFlow = (function () {
       <h2 class="detail-title">${Effi.util.escapeHtml(c.name)}</h2>
       <div class="detail-meta">
         ${Effi.util.escapeHtml(c.source || '-')}
-        ${c.profile_link ? ` &middot; <a href="${Effi.util.escapeHtml(c.profile_link)}" target="_blank" rel="noopener">link profile</a>` : ''}
+        ${c.profile_link ? ` &middot; <a href="${Effi.util.escapeHtml(c.profile_link)}" target="_blank" rel="noopener">profile link</a>` : ''}
         &middot; Meeting: ${Effi.util.formatDateTime(c.meeting_at)}
       </div>
 
       <div class="detail-section">
-        <div class="detail-section-title">Riset (AI-assisted)</div>
-        <button class="btn btn-ghost btn-sm" id="bf-copy-prompt">Buka profile + copy prompt riset</button>
-        <label>Hasil riset</label>
-        <textarea id="bf-research" placeholder="Paste hasil riset AI di sini...">${Effi.util.escapeHtml(c.research_text)}</textarea>
+        <div class="detail-section-title">Research (AI-assisted)</div>
+        <button class="btn btn-ghost btn-sm" id="bf-copy-prompt">Open profile + copy research prompt</button>
+        <label>Research result</label>
+        <textarea id="bf-research" placeholder="Paste the AI research result here...">${Effi.util.escapeHtml(c.research_text)}</textarea>
         <div class="checkbox-row">
           <input type="checkbox" id="bf-validated" ${c.research_validated ? 'checked' : ''}>
-          <label style="margin:0">Riset sudah divalidasi</label>
+          <label style="margin:0">Research validated</label>
         </div>
       </div>
 
       <div class="detail-section">
         <div class="detail-section-title">Sync Chat</div>
-        <label>Transkrip chat WhatsApp</label>
-        <textarea id="bf-chat" placeholder="Paste isi chat WA dengan client di sini...">${Effi.util.escapeHtml(c.chat_transcript)}</textarea>
+        <label>WhatsApp chat transcript</label>
+        <textarea id="bf-chat" placeholder="Paste the WhatsApp chat with the client here...">${Effi.util.escapeHtml(c.chat_transcript)}</textarea>
       </div>
 
       <div class="detail-section">
         <div class="detail-section-title">Report</div>
         ${c.report_sent_at
-          ? `<p class="field-hint">Report sudah dikirim ke Sophia (${Effi.util.formatDateTime(c.report_sent_at)}).</p>`
-          : `<p class="field-hint">Validasi riset + isi chat dulu, baru bisa kirim report ke Sophia.</p>`}
+          ? `<p class="field-hint">Report already sent to Sophia (${Effi.util.formatDateTime(c.report_sent_at)}).</p>`
+          : `<p class="field-hint">Validate the research and fill in the chat first before you can send the report to Sophia.</p>`}
         <div class="action-row">
           <button class="btn btn-primary" id="bf-send-sophia">Send to Sophia</button>
           <button class="btn btn-ghost" id="bf-download-pdf">Download PDF</button>
@@ -54,19 +54,19 @@ Effi.bookedFlow = (function () {
   function reportText(c) {
     const projectLabel = Effi.PROJECT_LABELS[c.project] || c.project;
     return [
-      `PROFIL: ${c.name} (${projectLabel})`,
-      `Sumber: ${c.source || '-'}`,
-      `Link profile: ${c.profile_link || '-'}`,
+      `PROFILE: ${c.name} (${projectLabel})`,
+      `Source: ${c.source || '-'}`,
+      `Profile link: ${c.profile_link || '-'}`,
       `Meeting: ${Effi.util.formatDateTime(c.meeting_at)}`,
       '',
-      'RISET:',
+      'RESEARCH:',
       c.research_text || '-',
       '',
-      'RINGKASAN CHAT:',
+      'CHAT SUMMARY:',
       c.chat_transcript || '-',
       '',
-      'SARAN APPROACH:',
-      c.note ? c.note : 'Approach dengan ramah, dengarkan kebutuhan mereka, dan sampaikan value sesuai hasil riset di atas.'
+      'SUGGESTED APPROACH:',
+      c.note ? c.note : 'Approach warmly, listen to their needs, and communicate value based on the research above.'
     ].join('\n');
   }
 
@@ -99,7 +99,7 @@ Effi.bookedFlow = (function () {
       if (navigator.clipboard) {
         navigator.clipboard.writeText(text).catch(() => {});
       }
-      alert('Link profile dibuka + prompt riset udah ke-copy. Tinggal paste ke Claude, lalu paste hasilnya di kotak riset.');
+      alert('Profile link opened and the research prompt was copied. Paste it into Claude, then paste the result into the research box.');
     });
 
     document.getElementById('bf-research').addEventListener('input', debouncedAutosave);
@@ -109,7 +109,7 @@ Effi.bookedFlow = (function () {
     document.getElementById('bf-send-sophia').addEventListener('click', async () => {
       const fields = currentFieldValues();
       if (!fields.research_validated || !fields.chat_transcript.trim()) {
-        alert('Validasi riset dulu dan pastikan chat sudah di-paste sebelum kirim ke Sophia ya.');
+        alert('Validate the research and make sure the chat is pasted before sending to Sophia.');
         return;
       }
       const merged = { ...current, ...fields };
@@ -126,7 +126,7 @@ Effi.bookedFlow = (function () {
           client_id: updated.id,
           audience: 'sophia',
           kind: 'new_report',
-          message: `Report baru siap: ${updated.name} (${Effi.PROJECT_LABELS[updated.project] || updated.project})`
+          message: `New report ready: ${updated.name} (${Effi.PROJECT_LABELS[updated.project] || updated.project})`
         }).catch(() => {});
         if (Effi.reminders && Effi.reminders.refresh) Effi.reminders.refresh();
         open(current);

@@ -14,6 +14,16 @@ window.Effi = {
     bfp: 'Best Friend Production'
   },
 
+  PLATFORMS: ['instagram', 'linkedin', 'facebook', 'tiktok', 'web', 'in_person'],
+  PLATFORM_LABELS: {
+    instagram: 'Instagram',
+    linkedin: 'LinkedIn',
+    facebook: 'Facebook',
+    tiktok: 'TikTok',
+    web: 'Web',
+    in_person: 'In Person'
+  },
+
   state: {
     activeProject: 'saha_synergy'
   },
@@ -44,6 +54,9 @@ window.Effi = {
     },
     openModal(id) {
       document.getElementById(id).hidden = false;
+    },
+    platformLabel(source) {
+      return Effi.PLATFORM_LABELS[source] || source || '-';
     },
     closeModal(id) {
       document.getElementById(id).hidden = true;

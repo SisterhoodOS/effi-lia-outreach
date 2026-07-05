@@ -74,24 +74,49 @@ label { font-weight: 600; font-size: 0.82rem; color: var(--maroon-700); display:
 .status-interest { background: var(--status-interest-bg); color: var(--status-interest-fg); }
 .status-not_interest { background: var(--status-not-interest-bg); color: var(--status-not-interest-fg); text-decoration: line-through; }
 .status-booked { background: var(--status-booked-bg); color: var(--status-booked-fg); }
+.status-select-no_response { background: var(--status-no-response-bg); color: var(--status-no-response-fg); }
+.status-select-response { background: var(--status-response-bg); color: var(--status-response-fg); }
+.status-select-interest { background: var(--status-interest-bg); color: var(--status-interest-fg); }
+.status-select-not_interest { background: var(--status-not-interest-bg); color: var(--status-not-interest-fg); }
+.status-select-booked { background: var(--status-booked-bg); color: var(--status-booked-fg); }
 
-/* ── Client card ───────────────────────────────────────── */
-.client-card {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  flex-wrap: wrap;
-  background: var(--blush-50);
-  border-radius: var(--radius-md);
-  padding: 1rem 1.2rem;
-  box-shadow: var(--shadow-softer);
+/* ── Clients table ─────────────────────────────────────── */
+.clients-list { overflow-x: auto; border-radius: var(--radius-md); border: 1px solid var(--pink-100); }
+.clients-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+  background: #fff;
 }
-.client-card-main { flex: 1; min-width: 200px; }
-.client-card-name { font-family: var(--font-display); font-weight: 600; font-size: 1.05rem; color: var(--maroon-900); }
-.client-card-meta { font-size: 0.78rem; color: var(--ink-soft); margin-top: 0.15rem; }
-.client-card-meta a { color: var(--purple-500); }
-.client-card-note { font-size: 0.82rem; color: var(--ink-soft); margin-top: 0.35rem; font-style: italic; }
-.client-card-actions { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
+.clients-table thead th {
+  font-family: var(--font-display);
+  font-weight: 600;
+  text-align: left;
+  color: var(--maroon-900);
+  background: var(--pink-100);
+  padding: 0.65rem 0.9rem;
+  border-bottom: 2px solid var(--purple-200);
+  white-space: nowrap;
+}
+.clients-table thead th.col-status { width: 9rem; }
+.clients-table thead th.col-platform { width: 8rem; }
+.clients-table thead th.col-actions { width: 12rem; }
+.clients-table tbody tr { border-bottom: 1px solid var(--pink-100); }
+.clients-table tbody tr:nth-child(even) { background: var(--blush-50); }
+.clients-table tbody tr:hover { background: var(--purple-200); }
+.clients-table td { padding: 0.6rem 0.9rem; vertical-align: middle; }
+.ct-name { font-family: var(--font-display); font-weight: 600; color: var(--maroon-900); }
+.ct-meeting { font-family: var(--font-body); font-weight: 400; font-size: 0.75rem; color: var(--ink-soft); margin-top: 0.15rem; }
+.ct-notes { font-size: 0.82rem; color: var(--ink-soft); font-style: italic; max-width: 220px; }
+.ct-actions { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+.client-status-select {
+  border: none;
+  font-weight: 700;
+  font-size: 0.78rem;
+  border-radius: 999px;
+  padding: 0.3rem 0.6rem;
+  cursor: pointer;
+}
 
 /* ── Targets table ─────────────────────────────────────── */
 .targets-table {
@@ -156,6 +181,14 @@ label { font-weight: 600; font-size: 0.82rem; color: var(--maroon-700); display:
 .target-row.done { opacity: 0.55; }
 .target-row.done .target-name-input { text-decoration: line-through; }
 .targets-progress { font-weight: 600; color: var(--maroon-700); font-size: 0.85rem; }
+.targets-readonly-badge {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--maroon-700);
+  background: var(--pink-100);
+  padding: 0.25rem 0.7rem;
+  border-radius: 999px;
+}
 
 /* ── Notifications ─────────────────────────────────────── */
 .notif-bell-btn {
@@ -200,3 +233,15 @@ label { font-weight: 600; font-size: 0.82rem; color: var(--maroon-700); display:
 .detail-section-title { font-weight: 700; color: var(--maroon-700); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.04em; }
 .checkbox-row { display: flex; align-items: center; gap: 0.5rem; margin-top: 0.6rem; font-size: 0.85rem; }
 .action-row { display: flex; gap: 0.6rem; flex-wrap: wrap; margin-top: 1rem; }
+.report-locked-view {
+  width: 100%;
+  min-height: 220px;
+  background: var(--blush-50);
+  color: var(--ink);
+  font-family: 'Courier New', monospace;
+  font-size: 0.82rem;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  border: 1px dashed var(--purple-200);
+  cursor: default;
+}

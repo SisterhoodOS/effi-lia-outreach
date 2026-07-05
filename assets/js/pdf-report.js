@@ -54,7 +54,7 @@ window.EffiPDF = (function () {
 
     sectionTitle('Profile');
     y = wrapText(doc, `Name: ${client.name || '-'}`, margin, y, pageWidth - margin * 2, 14);
-    y = wrapText(doc, `Source: ${client.source || '-'}`, margin, y, pageWidth - margin * 2, 14);
+    y = wrapText(doc, `Platform: ${Effi.util.platformLabel(client.source)}`, margin, y, pageWidth - margin * 2, 14);
     y = wrapText(doc, `Profile link: ${client.profile_link || '-'}`, margin, y, pageWidth - margin * 2, 14);
     const meetingStr = client.meeting_at
       ? new Date(client.meeting_at).toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' })

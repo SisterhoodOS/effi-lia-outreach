@@ -10,6 +10,9 @@ Effi.clients = (function () {
     booked: 'Booked'
   };
 
+  const PLATFORMS = Effi.PLATFORMS;
+  const PLATFORM_LABELS = Effi.PLATFORM_LABELS;
+
   let rows = [];
   let editingId = null;
 
@@ -33,32 +36,49 @@ Effi.clients = (function () {
     ).join('');
   }
 
+  function platformOptionsHtml(current) {
+    return PLATFORMS.map(p =>
+      `<option value="${p}" ${p === current ? 'selected' : ''}>${PLATFORM_LABELS[p]}</option>`
+    ).join('');
+  }
+
   function render() {
     const list = document.getElementById('clients-list');
     const empty = document.getElementById('clients-empty');
     const items = filtered();
 
     empty.hidden = rows.length !== 0;
-    list.innerHTML = items.map(c => `
-      <div class="client-card" data-id="${c.id}">
-        <div class="client-card-main">
-          <div class="client-card-name">${Effi.util.escapeHtml(c.name)}</div>
-          <div class="client-card-meta">
-            ${Effi.util.escapeHtml(c.source || '-')}
-            ${c.profile_link ? ` &middot; <a href="${Effi.util.escapeHtml(c.profile_link)}" target="_blank" rel="noopener">profile link</a>` : ''}
-            ${c.handled_by ? ` &middot; handled by ${Effi.util.escapeHtml(c.handled_by)}` : ''}
-            ${c.meeting_at ? ` &middot; meeting: ${Effi.util.formatDateTime(c.meeting_at)}` : ''}
-          </div>
-          ${c.note ? `<div class="client-card-note">${Effi.util.escapeHtml(c.note)}</div>` : ''}
-        </div>
-        <div class="client-card-actions">
-          <span class="status-badge status-${c.status}">${STATUS_LABELS[c.status]}</span>
-          <select class="client-status-select" data-id="${c.id}">${statusOptionsHtml(c.status)}</select>
+
+    const bodyRows = items.map(c => `
+      <tr data-id="${c.id}">
+        <td class="ct-name">
+          ${Effi.util.escapeHtml(c.name)}
+          ${c.meeting_at ? `<div class="ct-meeting">Meeting: ${Effi.util.formatDateTime(c.meeting_at)}</div>` : ''}
+        </td>
+        <td>
+          <select class="client-status-select status-select-${c.status}" data-id="${c.id}">${statusOptionsHtml(c.status)}</select>
+        </td>
+        <td>${PLATFORM_LABELS[c.source] || Effi.util.escapeHtml(c.source || '-')}</td>
+        <td>${c.profile_link ? `<a href="${Effi.util.escapeHtml(c.profile_link)}" target="_blank" rel="noopener">View profile</a>` : '-'}</td>
+        <td class="ct-notes">${c.note ? Effi.util.escapeHtml(c.note) : '-'}</td>
+        <td class="ct-actions">
           ${c.status === 'booked' ? `<button class="btn btn-ghost btn-sm client-view-detail" data-id="${c.id}">View Detail</button>` : ''}
           <button class="btn btn-ghost btn-sm client-edit" data-id="${c.id}">Edit</button>
-        </div>
-      </div>
+        </td>
+      </tr>
     `).join('');
+
+    list.innerHTML = `
+      <table class="clients-table">
+        <thead>
+          <tr>
+            <th>Name</th><th class="col-status">Status</th><th class="col-platform">Platform</th>
+            <th>Link to Profile</th><th>Notes</th><th class="col-actions"></th>
+          </tr>
+        </thead>
+        <tbody>${bodyRows}</tbody>
+      </table>
+    `;
   }
 
   function formHtml(client) {
@@ -67,8 +87,8 @@ Effi.clients = (function () {
       <h2 class="detail-title">${client ? 'Edit' : 'Add'} Client</h2>
       <label>Name</label>
       <input type="text" id="cf-name" value="${Effi.util.escapeHtml(c.name)}">
-      <label>Source</label>
-      <input type="text" id="cf-source" value="${Effi.util.escapeHtml(c.source)}">
+      <label>Platform</label>
+      <select id="cf-source">${platformOptionsHtml(c.source)}</select>
       <label>Profile link</label>
       <input type="text" id="cf-link" value="${Effi.util.escapeHtml(c.profile_link)}" placeholder="https://instagram.com/...">
       <label>Handled by (optional)</label>

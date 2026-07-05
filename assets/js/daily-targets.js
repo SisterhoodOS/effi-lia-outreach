@@ -11,6 +11,11 @@ Effi.dailyTargets = (function () {
     return d.toLocaleDateString('en-US', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
   }
 
+  function fmtDateShort(dateStr) {
+    const d = new Date(dateStr + 'T00:00:00');
+    return d.toLocaleDateString('en-US', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
+  }
+
   async function ensureSlotsExist(project, dateStr) {
     const existing = await Effi.db.getRows('effi_daily_targets', { project, target_date: dateStr });
     if (existing.length > 0) return existing;
@@ -83,11 +88,13 @@ Effi.dailyTargets = (function () {
   async function loadHistoryOptions(project) {
     const select = document.getElementById('targets-history-select');
     const rows = await Effi.db.getRows('effi_daily_targets', { project });
-    const dates = [...new Set(rows.map(r => r.target_date))].sort().reverse();
     const today = Effi.util.todayISODate();
-    select.innerHTML = dates.map(d =>
-      `<option value="${d}">${d === today ? 'Today' : d}</option>`
-    ).join('') || `<option value="${today}">Today</option>`;
+    const dates = new Set(rows.map(r => r.target_date));
+    dates.add(today); // always offer today, even before it's been started
+    const sorted = [...dates].sort().reverse();
+    select.innerHTML = sorted.map(d =>
+      `<option value="${d}">${d === today ? `Today — ${fmtDateShort(d)}` : fmtDateShort(d)}</option>`
+    ).join('');
     select.value = today;
   }
 
@@ -96,12 +103,15 @@ Effi.dailyTargets = (function () {
     const isToday = dateStr === Effi.util.todayISODate();
     document.getElementById('targets-date-label').textContent = fmtDateLabel(dateStr);
     document.getElementById('targets-panel').hidden = false;
+    const historySelect = document.getElementById('targets-history-select');
+    if (historySelect.value !== dateStr) historySelect.value = dateStr;
 
     slots = isToday
       ? await ensureSlotsExist(project, dateStr)
       : await Effi.db.getRows('effi_daily_targets', { project, target_date: dateStr });
 
     renderGrid(!isToday);
+    document.getElementById('targets-readonly-badge').hidden = isToday;
   }
 
   function debouncedSave(id, patch) {

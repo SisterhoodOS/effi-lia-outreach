@@ -1,0 +1,31 @@
+:root {
+  --blush-50:   #fdf6f8;
+  --pink-100:   #fbe4ee;
+  --pink-300:   #f0b8cc;
+  --purple-200: #e3cdec;
+  --purple-500: #a97bc4;
+  --maroon-700: #8c2f4a;
+  --maroon-900: #5c1a2e;
+  --ink:        #3a1424;
+  --ink-soft:   #7a4a5e;
+
+  --status-no-response-bg: var(--pink-100);
+  --status-no-response-fg: var(--ink-soft);
+  --status-response-bg: var(--purple-200);
+  --status-response-fg: var(--purple-500);
+  --status-interest-bg: var(--pink-100);
+  --status-interest-fg: #e0709a;
+  --status-not-interest-bg: var(--pink-100);
+  --status-not-interest-fg: #9c6b78;
+  --status-booked-bg: var(--maroon-900);
+  --status-booked-fg: #fff8fa;
+
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-body: 'Quicksand', 'Trebuchet MS', sans-serif;
+
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --shadow-soft: 0 8px 24px rgba(92, 26, 46, 0.12);
+  --shadow-softer: 0 4px 12px rgba(92, 26, 46, 0.08);
+}

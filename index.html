@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Effi Lia - Outreach</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/layout.css">
+<link rel="stylesheet" href="assets/css/components.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+
+<div id="auth-gate" class="auth-gate">
+  <div class="auth-gate-card">
+    <p class="auth-gate-eyebrow">Sisterhood OS</p>
+    <h1 class="auth-gate-title">Effi Lia <span>- Outreach</span></h1>
+    <p class="auth-gate-sub">Masukkan password tim buat masuk ✨</p>
+    <input type="password" id="auth-gate-input" class="auth-gate-input" placeholder="Password">
+    <button id="auth-gate-submit" class="btn btn-primary btn-block">Masuk</button>
+    <p id="auth-gate-error" class="auth-gate-error" hidden>Password salah, coba lagi ya.</p>
+  </div>
+</div>
+
+<div id="app" class="app" hidden>
+
+  <header class="app-header">
+    <h1 class="app-title">Effi Lia <span>- Outreach</span></h1>
+    <div class="header-actions">
+      <button id="template-editor-btn" class="btn btn-ghost">Edit Template</button>
+      <div class="notif-bell-wrap">
+        <button id="notif-bell-btn" class="notif-bell-btn" title="Notifikasi">
+          🔔<span id="notif-bell-badge" class="notif-badge" hidden>0</span>
+        </button>
+        <div id="notif-panel" class="notif-panel" hidden>
+          <div class="notif-panel-header">Notifikasi</div>
+          <div id="notif-list" class="notif-list"></div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <nav class="project-tabs" id="project-tabs">
+    <button class="tab-btn active" data-project="saha_synergy">Saha Synergy</button>
+    <button class="tab-btn" data-project="bwb">BWB</button>
+    <button class="tab-btn" data-project="bfp">Best Friend Production</button>
+  </nav>
+
+  <main class="project-view">
+
+    <section class="targets-section">
+      <button id="start-day-btn" class="btn btn-primary btn-lg">✨ Start the Day Queen ✨</button>
+      <div id="targets-panel" class="targets-panel" hidden>
+        <div class="targets-header">
+          <h2 id="targets-date-label" class="targets-date-label"></h2>
+          <span id="targets-progress" class="targets-progress"></span>
+          <select id="targets-history-select" class="targets-history-select">
+            <option value="">Hari ini</option>
+          </select>
+        </div>
+        <div id="targets-grid" class="targets-grid"></div>
+      </div>
+    </section>
+
+    <section class="clients-section">
+      <div class="clients-toolbar">
+        <input type="text" id="clients-search" class="clients-search" placeholder="Cari nama client...">
+        <select id="clients-status-filter" class="clients-status-filter">
+          <option value="">Semua status</option>
+          <option value="no_response">No Response</option>
+          <option value="response">Response</option>
+          <option value="interest">Interest</option>
+          <option value="not_interest">Not Interest</option>
+          <option value="booked">Booked</option>
+        </select>
+        <button id="add-client-btn" class="btn btn-primary">+ Tambah Client</button>
+      </div>
+      <div id="clients-empty" class="clients-empty" hidden>Belum ada client di project ini. Klik "+ Tambah Client" buat mulai 🤍</div>
+      <div id="clients-list" class="clients-list"></div>
+    </section>
+
+  </main>
+</div>
+
+<div id="client-form-modal" class="modal" hidden>
+  <div class="modal-card">
+    <button class="modal-close" data-close-modal="client-form-modal">&times;</button>
+    <div id="client-form-body"></div>
+  </div>
+</div>
+
+<div id="client-detail-modal" class="modal" hidden>
+  <div class="modal-card modal-card-lg">
+    <button class="modal-close" data-close-modal="client-detail-modal">&times;</button>
+    <div id="client-detail-body"></div>
+  </div>
+</div>
+
+<div id="template-editor-modal" class="modal" hidden>
+  <div class="modal-card modal-card-lg">
+    <button class="modal-close" data-close-modal="template-editor-modal">&times;</button>
+    <div id="template-editor-body"></div>
+  </div>
+</div>
+
+<script src="assets/js/supabase-client.js"></script>
+<script src="assets/js/auth-gate.js"></script>
+<script src="assets/js/clients.js"></script>
+<script src="assets/js/daily-targets.js"></script>
+<script src="assets/js/booked-flow.js"></script>
+<script src="assets/js/reminders.js"></script>
+<script src="assets/js/pdf-report.js"></script>
+<script src="assets/js/app.js"></script>
+</body>
+</html>

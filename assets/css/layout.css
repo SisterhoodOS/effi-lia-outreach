@@ -1,0 +1,180 @@
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  background: linear-gradient(180deg, var(--blush-50), var(--pink-100) 60%);
+  color: var(--ink);
+  min-height: 100vh;
+}
+
+/* ── Auth gate ─────────────────────────────────────────── */
+.auth-gate {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(160deg, var(--purple-200), var(--pink-300) 70%);
+  z-index: 100;
+}
+.auth-gate-card {
+  background: #fff;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+  padding: 2.5rem 2.5rem 2rem;
+  width: min(90vw, 380px);
+  text-align: center;
+}
+.auth-gate-eyebrow {
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-size: 0.7rem;
+  color: var(--purple-500);
+  margin: 0 0 0.5rem;
+}
+.auth-gate-title {
+  font-family: var(--font-display);
+  font-size: 1.9rem;
+  margin: 0 0 0.5rem;
+  color: var(--maroon-900);
+}
+.auth-gate-title span { color: var(--maroon-700); font-weight: 400; }
+.auth-gate-sub { color: var(--ink-soft); margin: 0 0 1.25rem; font-size: 0.95rem; }
+.auth-gate-input {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--purple-200);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  margin-bottom: 0.75rem;
+}
+.auth-gate-error { color: var(--maroon-700); font-size: 0.85rem; margin-top: 0.75rem; }
+
+/* ── App shell ─────────────────────────────────────────── */
+.app { max-width: 1100px; margin: 0 auto; padding: 1.5rem 1.25rem 4rem; }
+
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0 1.25rem;
+}
+.app-title {
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  color: var(--maroon-900);
+  margin: 0;
+}
+.app-title span { color: var(--maroon-700); font-weight: 400; }
+.header-actions { display: flex; align-items: center; gap: 0.75rem; position: relative; }
+
+.notif-bell-wrap { position: relative; }
+.notif-panel {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 8px);
+  width: 320px;
+  max-height: 420px;
+  overflow-y: auto;
+  background: #fff;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-soft);
+  z-index: 40;
+}
+.notif-panel-header {
+  font-family: var(--font-display);
+  font-weight: 600;
+  padding: 0.9rem 1.1rem 0.5rem;
+  color: var(--maroon-900);
+}
+
+/* ── Tabs ──────────────────────────────────────────────── */
+.project-tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+/* ── Sections ──────────────────────────────────────────── */
+.targets-section, .clients-section {
+  background: #fff;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-softer);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.targets-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+.targets-date-label {
+  font-family: var(--font-display);
+  color: var(--maroon-900);
+  margin: 0;
+  font-size: 1.2rem;
+}
+.targets-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 0.6rem;
+}
+
+.clients-toolbar {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.25rem;
+}
+.clients-list { display: flex; flex-direction: column; gap: 0.75rem; }
+.clients-empty {
+  text-align: center;
+  color: var(--ink-soft);
+  padding: 2rem 1rem;
+  font-family: var(--font-display);
+}
+
+/* ── Modals ────────────────────────────────────────────── */
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(58, 20, 36, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 90;
+  padding: 1.5rem;
+}
+.modal-card {
+  background: #fff;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+  padding: 2rem;
+  width: min(92vw, 480px);
+  max-height: 88vh;
+  overflow-y: auto;
+  position: relative;
+}
+.modal-card-lg { width: min(92vw, 640px); }
+.modal-close {
+  position: absolute;
+  top: 1rem;
+  right: 1.1rem;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: var(--ink-soft);
+  cursor: pointer;
+  line-height: 1;
+}
+
+@media (max-width: 640px) {
+  .app { padding: 1rem 0.75rem 3rem; }
+  .app-header { flex-wrap: wrap; gap: 0.75rem; }
+}

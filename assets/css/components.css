@@ -1,0 +1,155 @@
+/* ── Buttons ───────────────────────────────────────────── */
+.btn {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.9rem;
+  border: none;
+  border-radius: 999px;
+  padding: 0.65rem 1.3rem;
+  cursor: pointer;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+.btn:active { transform: scale(0.97); }
+.btn-primary {
+  background: linear-gradient(135deg, var(--maroon-900), var(--maroon-700));
+  color: #fff8fa;
+  box-shadow: var(--shadow-softer);
+}
+.btn-primary:hover { box-shadow: var(--shadow-soft); }
+.btn-ghost {
+  background: var(--purple-200);
+  color: var(--maroon-900);
+}
+.btn-ghost:hover { background: var(--purple-500); color: #fff; }
+.btn-block { width: 100%; }
+.btn-lg { padding: 0.9rem 2rem; font-size: 1.05rem; display: block; margin: 0 auto 0.5rem; }
+.btn-danger { background: var(--status-not-interest-bg); color: var(--status-not-interest-fg); }
+.btn-sm { padding: 0.4rem 0.9rem; font-size: 0.8rem; }
+
+/* ── Tabs ──────────────────────────────────────────────── */
+.tab-btn {
+  font-family: var(--font-body);
+  font-weight: 600;
+  border: none;
+  background: #fff;
+  color: var(--ink-soft);
+  padding: 0.6rem 1.2rem;
+  border-radius: 999px;
+  cursor: pointer;
+  box-shadow: var(--shadow-softer);
+}
+.tab-btn.active {
+  background: linear-gradient(135deg, var(--pink-300), var(--purple-500));
+  color: #fff;
+}
+
+/* ── Form inputs ───────────────────────────────────────── */
+input[type=text], input[type=password], input[type=datetime-local], input[type=date], textarea, select {
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  border: 1px solid var(--purple-200);
+  border-radius: var(--radius-sm);
+  padding: 0.6rem 0.85rem;
+  color: var(--ink);
+  background: var(--blush-50);
+}
+textarea { width: 100%; min-height: 90px; resize: vertical; font-family: var(--font-body); }
+label { font-weight: 600; font-size: 0.82rem; color: var(--maroon-700); display: block; margin: 0.9rem 0 0.3rem; }
+
+.field-hint { font-size: 0.72rem; color: var(--ink-soft); margin-top: 0.2rem; }
+
+.clients-search, .clients-status-filter { flex: 1; min-width: 160px; }
+
+/* ── Status badge ──────────────────────────────────────── */
+.status-badge {
+  display: inline-block;
+  padding: 0.25rem 0.7rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: capitalize;
+}
+.status-no_response { background: var(--status-no-response-bg); color: var(--status-no-response-fg); }
+.status-response { background: var(--status-response-bg); color: var(--status-response-fg); }
+.status-interest { background: var(--status-interest-bg); color: var(--status-interest-fg); }
+.status-not_interest { background: var(--status-not-interest-bg); color: var(--status-not-interest-fg); text-decoration: line-through; }
+.status-booked { background: var(--status-booked-bg); color: var(--status-booked-fg); }
+
+/* ── Client card ───────────────────────────────────────── */
+.client-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  background: var(--blush-50);
+  border-radius: var(--radius-md);
+  padding: 1rem 1.2rem;
+  box-shadow: var(--shadow-softer);
+}
+.client-card-main { flex: 1; min-width: 200px; }
+.client-card-name { font-family: var(--font-display); font-weight: 600; font-size: 1.05rem; color: var(--maroon-900); }
+.client-card-meta { font-size: 0.78rem; color: var(--ink-soft); margin-top: 0.15rem; }
+.client-card-meta a { color: var(--purple-500); }
+.client-card-note { font-size: 0.82rem; color: var(--ink-soft); margin-top: 0.35rem; font-style: italic; }
+.client-card-actions { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
+
+/* ── Targets grid ──────────────────────────────────────── */
+.target-slot {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: var(--blush-50);
+  border-radius: var(--radius-sm);
+  padding: 0.4rem 0.6rem;
+  box-shadow: var(--shadow-softer);
+}
+.target-slot-num { font-family: var(--font-display); color: var(--purple-500); font-weight: 700; width: 1.6rem; text-align: center; flex-shrink: 0; }
+.target-slot input[type=text] { flex: 1; border: none; background: transparent; padding: 0.2rem; }
+.target-slot input[type=text]:focus { outline: none; }
+.target-slot.done { opacity: 0.55; }
+.target-slot.done .target-slot-num { text-decoration: line-through; }
+.targets-progress { font-weight: 600; color: var(--maroon-700); font-size: 0.85rem; }
+
+/* ── Notifications ─────────────────────────────────────── */
+.notif-bell-btn {
+  position: relative;
+  background: var(--purple-200);
+  border: none;
+  border-radius: 999px;
+  width: 42px;
+  height: 42px;
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+.notif-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  background: var(--maroon-900);
+  color: #fff;
+  font-size: 0.65rem;
+  font-weight: 700;
+  border-radius: 999px;
+  min-width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 4px;
+}
+.notif-item {
+  padding: 0.7rem 1.1rem;
+  border-top: 1px solid var(--pink-100);
+  font-size: 0.85rem;
+}
+.notif-item-time { font-size: 0.7rem; color: var(--ink-soft); margin-top: 0.2rem; }
+.notif-item-mark { font-size: 0.72rem; color: var(--purple-500); cursor: pointer; background: none; border: none; padding: 0.2rem 0; }
+.notif-empty { padding: 1.2rem; text-align: center; color: var(--ink-soft); font-size: 0.85rem; }
+
+/* ── Detail sections ───────────────────────────────────── */
+.detail-title { font-family: var(--font-display); color: var(--maroon-900); font-size: 1.3rem; margin: 0 0 0.2rem; }
+.detail-meta { font-size: 0.82rem; color: var(--ink-soft); margin-bottom: 1rem; }
+.detail-section { margin-top: 1.2rem; padding-top: 1.2rem; border-top: 1px dashed var(--purple-200); }
+.detail-section-title { font-weight: 700; color: var(--maroon-700); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.04em; }
+.checkbox-row { display: flex; align-items: center; gap: 0.5rem; margin-top: 0.6rem; font-size: 0.85rem; }
+.action-row { display: flex; gap: 0.6rem; flex-wrap: wrap; margin-top: 1rem; }

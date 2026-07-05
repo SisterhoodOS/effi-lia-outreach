@@ -44,9 +44,9 @@ const EFFI_AUTH_KEY = 'effi_lia_auth_ok';
       });
     }
 
-    if (localStorage.getItem(EFFI_AUTH_KEY) === '1') {
-      unlock();
-    }
+    // Password gate temporarily disabled — auto-unlock for everyone.
+    // TODO: re-enable once the login issue is fully diagnosed.
+    unlock();
 
     submit.addEventListener('click', tryUnlock);
     submit.addEventListener('touchend', tryUnlock);

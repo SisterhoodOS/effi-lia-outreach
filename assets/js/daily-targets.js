@@ -57,6 +57,12 @@ Effi.dailyTargets = (function () {
     ).join('');
   }
 
+  function platformOptionsHtml(current) {
+    return Effi.PLATFORMS.map(p =>
+      `<option value="${p}" ${p === current ? 'selected' : ''}>${Effi.PLATFORM_LABELS[p]}</option>`
+    ).join('');
+  }
+
   function renderGrid(readOnly) {
     const grid = document.getElementById('targets-grid');
     const rows = slots.sort((a, b) => a.slot_number - b.slot_number).map(s => `
@@ -68,6 +74,15 @@ Effi.dailyTargets = (function () {
         <td>
           <select class="target-status-select status-select-${s.status || 'pending'}" data-id="${s.id}" ${readOnly ? 'disabled' : ''}>${statusOptionsHtml(s.status)}</select>
         </td>
+        <td>
+          <select class="target-platform-select" data-id="${s.id}" ${readOnly ? 'disabled' : ''}><option value="">-</option>${platformOptionsHtml(s.platform)}</select>
+        </td>
+        <td>
+          <input type="text" class="target-link-input" value="${Effi.util.escapeHtml(s.profile_link || '')}" placeholder="Link to profile..." data-id="${s.id}" ${readOnly ? 'disabled' : ''}>
+        </td>
+        <td>
+          <input type="text" class="target-notes-input" value="${Effi.util.escapeHtml(s.notes || '')}" placeholder="Notes..." data-id="${s.id}" ${readOnly ? 'disabled' : ''}>
+        </td>
         <td class="target-row-done">
           <input type="checkbox" ${s.done ? 'checked' : ''} data-id="${s.id}" ${readOnly ? 'disabled' : ''} title="Mark done">
         </td>
@@ -77,7 +92,10 @@ Effi.dailyTargets = (function () {
     grid.innerHTML = `
       <table class="targets-table">
         <thead>
-          <tr><th class="col-num">#</th><th>Target Name</th><th class="col-status">Status</th><th class="col-done">Done</th></tr>
+          <tr>
+            <th class="col-num">#</th><th>Target Name</th><th class="col-status">Status</th>
+            <th class="col-platform">Platform</th><th>Link to Profile</th><th>Notes</th><th class="col-done">Done</th>
+          </tr>
         </thead>
         <tbody>${rows}</tbody>
       </table>
@@ -135,12 +153,23 @@ Effi.dailyTargets = (function () {
       if (e.target.value) openForDate(Effi.state.activeProject, e.target.value);
     });
 
+    const FIELD_BY_CLASS = {
+      'target-name-input': 'client_name',
+      'target-link-input': 'profile_link',
+      'target-notes-input': 'notes'
+    };
+
     document.getElementById('targets-grid').addEventListener('input', (e) => {
-      if (!e.target.classList.contains('target-name-input')) return;
+      const field = Object.keys(FIELD_BY_CLASS).find(cls => e.target.classList.contains(cls));
+      if (!field) return;
+      const column = FIELD_BY_CLASS[field];
       const id = e.target.dataset.id;
       const slot = slots.find(s => s.id === id);
-      if (slot) slot.client_name = e.target.value;
-      debouncedSave(id, { client_name: e.target.value });
+      if (slot) slot[column] = e.target.value;
+      // `profile_link`/`notes` predate-column note: same graceful-fail as
+      // `status` below — fine to save even before the optional schema
+      // addition in supabase/schema.sql is applied.
+      debouncedSave(id, { [column]: e.target.value });
     });
 
     document.getElementById('targets-grid').addEventListener('change', (e) => {
@@ -162,6 +191,13 @@ Effi.dailyTargets = (function () {
         // fails gracefully (via Effi.db.updateRow's own error handling) until
         // the optional schema addition in supabase/schema.sql is applied.
         Effi.db.updateRow('effi_daily_targets', id, { status: e.target.value });
+        return;
+      }
+      if (e.target.classList.contains('target-platform-select')) {
+        const id = e.target.dataset.id;
+        const slot = slots.find(s => s.id === id);
+        if (slot) slot.platform = e.target.value;
+        Effi.db.updateRow('effi_daily_targets', id, { platform: e.target.value });
       }
     });
   }

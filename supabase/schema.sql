@@ -7,10 +7,13 @@
 -- Then paste this whole file into the SQL Editor and click Run.
 --
 -- OPTIONAL, no rush: if you already ran this script once before 2026-07-06,
--- your effi_daily_targets table won't have the new `status` column yet (the
--- app works fine without it — the status dropdown on each daily target just
--- won't save until you run this one line, whenever you have a moment):
+-- your effi_daily_targets table won't have these newer columns yet (the app
+-- works fine without them — those fields on each daily target just won't
+-- save until you run these lines, whenever you have a moment):
 --   alter table effi_daily_targets add column if not exists status text not null default 'pending';
+--   alter table effi_daily_targets add column if not exists platform text;
+--   alter table effi_daily_targets add column if not exists profile_link text;
+--   alter table effi_daily_targets add column if not exists notes text;
 
 create table if not exists effi_clients (
   id uuid primary key default gen_random_uuid(),
@@ -40,6 +43,9 @@ create table if not exists effi_daily_targets (
   client_name text,
   status text not null default 'pending'
     check (status in ('pending','contacted','response','interest','booked')),
+  platform text,
+  profile_link text,
+  notes text,
   done boolean not null default false,
   created_at timestamptz not null default now(),
   unique (project, target_date, slot_number)

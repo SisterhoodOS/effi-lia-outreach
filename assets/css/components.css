@@ -136,8 +136,10 @@ label { font-weight: 600; font-size: 0.82rem; color: var(--maroon-700); display:
   top: 0;
   border-bottom: 2px solid var(--purple-200);
 }
+.targets-table { min-width: 1100px; }
 .targets-table thead th.col-num { width: 3.5rem; text-align: center; }
-.targets-table thead th.col-status { width: 11rem; }
+.targets-table thead th.col-status { width: 9rem; }
+.targets-table thead th.col-platform { width: 7rem; }
 .targets-table thead th.col-done { width: 4rem; text-align: center; }
 .targets-table tbody tr {
   border-bottom: 1px solid var(--pink-100);
@@ -178,6 +180,24 @@ label { font-weight: 600; font-size: 0.82rem; color: var(--maroon-700); display:
 .status-select-response { background: var(--purple-200); color: var(--purple-500); }
 .status-select-interest { background: var(--pink-100); color: #e0709a; }
 .status-select-booked { background: var(--maroon-900); color: #fff8fa; }
+.target-platform-select {
+  width: 100%;
+  border: 1px solid var(--purple-200);
+  background: var(--blush-50);
+  border-radius: var(--radius-sm);
+  padding: 0.3rem 0.4rem;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+.target-link-input, .target-notes-input {
+  width: 100%;
+  border: none;
+  background: transparent;
+  padding: 0.25rem 0.3rem;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+}
+.target-link-input:focus, .target-notes-input:focus { outline: none; background: #fff; border-radius: var(--radius-sm); }
 .target-row.done { opacity: 0.55; }
 .target-row.done .target-name-input { text-decoration: line-through; }
 .targets-progress { font-weight: 600; color: var(--maroon-700); font-size: 0.85rem; }

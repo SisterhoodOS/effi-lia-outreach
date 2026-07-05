@@ -37,17 +37,46 @@ Effi.dailyTargets = (function () {
     document.getElementById('targets-progress').textContent = `${done}/${SLOT_COUNT} done`;
   }
 
+  const STATUS_OPTIONS = ['pending', 'contacted', 'response', 'interest', 'booked'];
+  const STATUS_LABELS = {
+    pending: 'Pending',
+    contacted: 'Contacted',
+    response: 'Response',
+    interest: 'Interest',
+    booked: 'Booked'
+  };
+
+  function statusOptionsHtml(current) {
+    return STATUS_OPTIONS.map(s =>
+      `<option value="${s}" ${s === (current || 'pending') ? 'selected' : ''}>${STATUS_LABELS[s]}</option>`
+    ).join('');
+  }
+
   function renderGrid(readOnly) {
     const grid = document.getElementById('targets-grid');
-    grid.innerHTML = slots
-      .sort((a, b) => a.slot_number - b.slot_number)
-      .map(s => `
-        <div class="target-slot ${s.done ? 'done' : ''}" data-id="${s.id}">
-          <span class="target-slot-num">${s.slot_number}</span>
-          <input type="text" value="${Effi.util.escapeHtml(s.client_name || '')}" placeholder="target name..." data-id="${s.id}" ${readOnly ? 'disabled' : ''}>
-          <input type="checkbox" ${s.done ? 'checked' : ''} data-id="${s.id}" ${readOnly ? 'disabled' : ''}>
-        </div>
-      `).join('');
+    const rows = slots.sort((a, b) => a.slot_number - b.slot_number).map(s => `
+      <tr class="target-row ${s.done ? 'done' : ''}" data-id="${s.id}">
+        <td class="target-row-num">${s.slot_number}</td>
+        <td>
+          <input type="text" class="target-name-input" value="${Effi.util.escapeHtml(s.client_name || '')}" placeholder="Who are you reaching out to?" data-id="${s.id}" ${readOnly ? 'disabled' : ''}>
+        </td>
+        <td>
+          <select class="target-status-select status-select-${s.status || 'pending'}" data-id="${s.id}" ${readOnly ? 'disabled' : ''}>${statusOptionsHtml(s.status)}</select>
+        </td>
+        <td class="target-row-done">
+          <input type="checkbox" ${s.done ? 'checked' : ''} data-id="${s.id}" ${readOnly ? 'disabled' : ''} title="Mark done">
+        </td>
+      </tr>
+    `).join('');
+
+    grid.innerHTML = `
+      <table class="targets-table">
+        <thead>
+          <tr><th class="col-num">#</th><th>Target Name</th><th class="col-status">Status</th><th class="col-done">Done</th></tr>
+        </thead>
+        <tbody>${rows}</tbody>
+      </table>
+    `;
     renderProgress();
   }
 
@@ -97,7 +126,7 @@ Effi.dailyTargets = (function () {
     });
 
     document.getElementById('targets-grid').addEventListener('input', (e) => {
-      if (e.target.type !== 'text') return;
+      if (!e.target.classList.contains('target-name-input')) return;
       const id = e.target.dataset.id;
       const slot = slots.find(s => s.id === id);
       if (slot) slot.client_name = e.target.value;
@@ -105,13 +134,25 @@ Effi.dailyTargets = (function () {
     });
 
     document.getElementById('targets-grid').addEventListener('change', (e) => {
-      if (e.target.type !== 'checkbox') return;
-      const id = e.target.dataset.id;
-      const slot = slots.find(s => s.id === id);
-      if (slot) slot.done = e.target.checked;
-      e.target.closest('.target-slot').classList.toggle('done', e.target.checked);
-      renderProgress();
-      Effi.db.updateRow('effi_daily_targets', id, { done: e.target.checked });
+      if (e.target.type === 'checkbox') {
+        const id = e.target.dataset.id;
+        const slot = slots.find(s => s.id === id);
+        if (slot) slot.done = e.target.checked;
+        e.target.closest('.target-row').classList.toggle('done', e.target.checked);
+        renderProgress();
+        Effi.db.updateRow('effi_daily_targets', id, { done: e.target.checked });
+        return;
+      }
+      if (e.target.classList.contains('target-status-select')) {
+        const id = e.target.dataset.id;
+        const slot = slots.find(s => s.id === id);
+        if (slot) slot.status = e.target.value;
+        e.target.className = `target-status-select status-select-${e.target.value}`;
+        // Older effi_daily_targets rows may predate the `status` column —
+        // fails gracefully (via Effi.db.updateRow's own error handling) until
+        // the optional schema addition in supabase/schema.sql is applied.
+        Effi.db.updateRow('effi_daily_targets', id, { status: e.target.value });
+      }
     });
   }
 

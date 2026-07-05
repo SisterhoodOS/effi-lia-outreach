@@ -5,6 +5,12 @@
 -- Before running: enable the pg_cron extension via
 -- Database → Extensions → search "pg_cron" → Enable.
 -- Then paste this whole file into the SQL Editor and click Run.
+--
+-- OPTIONAL, no rush: if you already ran this script once before 2026-07-06,
+-- your effi_daily_targets table won't have the new `status` column yet (the
+-- app works fine without it — the status dropdown on each daily target just
+-- won't save until you run this one line, whenever you have a moment):
+--   alter table effi_daily_targets add column if not exists status text not null default 'pending';
 
 create table if not exists effi_clients (
   id uuid primary key default gen_random_uuid(),
@@ -32,6 +38,8 @@ create table if not exists effi_daily_targets (
   target_date date not null,
   slot_number int not null check (slot_number between 1 and 50),
   client_name text,
+  status text not null default 'pending'
+    check (status in ('pending','contacted','response','interest','booked')),
   done boolean not null default false,
   created_at timestamptz not null default now(),
   unique (project, target_date, slot_number)

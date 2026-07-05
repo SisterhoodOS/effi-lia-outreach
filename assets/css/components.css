@@ -93,21 +93,68 @@ label { font-weight: 600; font-size: 0.82rem; color: var(--maroon-700); display:
 .client-card-note { font-size: 0.82rem; color: var(--ink-soft); margin-top: 0.35rem; font-style: italic; }
 .client-card-actions { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
 
-/* ── Targets grid ──────────────────────────────────────── */
-.target-slot {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-  background: var(--blush-50);
-  border-radius: var(--radius-sm);
-  padding: 0.4rem 0.6rem;
-  box-shadow: var(--shadow-softer);
+/* ── Targets table ─────────────────────────────────────── */
+.targets-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+  background: #fff;
 }
-.target-slot-num { font-family: var(--font-display); color: var(--purple-500); font-weight: 700; width: 1.6rem; text-align: center; flex-shrink: 0; }
-.target-slot input[type=text] { flex: 1; border: none; background: transparent; padding: 0.2rem; }
-.target-slot input[type=text]:focus { outline: none; }
-.target-slot.done { opacity: 0.55; }
-.target-slot.done .target-slot-num { text-decoration: line-through; }
+.targets-table thead th {
+  font-family: var(--font-display);
+  font-weight: 600;
+  text-align: left;
+  color: var(--maroon-900);
+  background: var(--pink-100);
+  padding: 0.65rem 0.9rem;
+  position: sticky;
+  top: 0;
+  border-bottom: 2px solid var(--purple-200);
+}
+.targets-table thead th.col-num { width: 3.5rem; text-align: center; }
+.targets-table thead th.col-status { width: 11rem; }
+.targets-table thead th.col-done { width: 4rem; text-align: center; }
+.targets-table tbody tr {
+  border-bottom: 1px solid var(--pink-100);
+  transition: background 0.1s ease;
+}
+.targets-table tbody tr:nth-child(even) { background: var(--blush-50); }
+.targets-table tbody tr:hover { background: var(--purple-200); }
+.targets-table td {
+  padding: 0.45rem 0.9rem;
+  vertical-align: middle;
+}
+.target-row-num {
+  font-family: var(--font-display);
+  color: var(--purple-500);
+  font-weight: 700;
+  text-align: center;
+}
+.target-row-done { text-align: center; }
+.target-name-input {
+  width: 100%;
+  border: none;
+  background: transparent;
+  padding: 0.25rem 0.3rem;
+  font-family: var(--font-body);
+}
+.target-name-input:focus { outline: none; background: #fff; border-radius: var(--radius-sm); }
+.target-status-select {
+  width: 100%;
+  border: none;
+  font-weight: 700;
+  font-size: 0.78rem;
+  border-radius: 999px;
+  padding: 0.3rem 0.6rem;
+  cursor: pointer;
+}
+.status-select-pending { background: var(--pink-100); color: var(--ink-soft); }
+.status-select-contacted { background: var(--purple-200); color: var(--purple-500); }
+.status-select-response { background: var(--purple-200); color: var(--purple-500); }
+.status-select-interest { background: var(--pink-100); color: #e0709a; }
+.status-select-booked { background: var(--maroon-900); color: #fff8fa; }
+.target-row.done { opacity: 0.55; }
+.target-row.done .target-name-input { text-decoration: line-through; }
 .targets-progress { font-weight: 600; color: var(--maroon-700); font-size: 0.85rem; }
 
 /* ── Notifications ─────────────────────────────────────── */

@@ -209,6 +209,20 @@ label { font-weight: 600; font-size: 0.82rem; color: var(--maroon-700); display:
   padding: 0.25rem 0.7rem;
   border-radius: 999px;
 }
+.targets-date-picker {
+  border: 1px solid var(--purple-200);
+  border-radius: var(--radius-sm);
+  padding: 0.4rem 0.6rem;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+.targets-empty-note {
+  text-align: center;
+  color: var(--ink-soft);
+  padding: 2rem 1rem;
+  font-family: var(--font-display);
+}
 
 /* ── Notifications ─────────────────────────────────────── */
 .notif-bell-btn {

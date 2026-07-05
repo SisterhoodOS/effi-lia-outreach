@@ -7,9 +7,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/tokens.css?v=7">
-<link rel="stylesheet" href="assets/css/layout.css?v=7">
-<link rel="stylesheet" href="assets/css/components.css?v=7">
+<link rel="stylesheet" href="assets/css/tokens.css?v=8">
+<link rel="stylesheet" href="assets/css/layout.css?v=8">
+<link rel="stylesheet" href="assets/css/components.css?v=8">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
@@ -48,9 +48,8 @@
           <h2 id="targets-date-label" class="targets-date-label"></h2>
           <span id="targets-progress" class="targets-progress"></span>
           <span id="targets-readonly-badge" class="targets-readonly-badge" hidden>📄 Past report — read only</span>
-          <select id="targets-history-select" class="targets-history-select">
-            <option value="">Today</option>
-          </select>
+          <input type="date" id="targets-date-picker" class="targets-date-picker">
+          <button id="targets-jump-today" class="btn btn-ghost btn-sm">Today</button>
         </div>
         <div id="targets-grid" class="targets-grid"></div>
       </div>
@@ -97,12 +96,12 @@
   </div>
 </div>
 
-<script src="assets/js/supabase-client.js?v=7"></script>
-<script src="assets/js/clients.js?v=7"></script>
-<script src="assets/js/daily-targets.js?v=7"></script>
-<script src="assets/js/booked-flow.js?v=7"></script>
-<script src="assets/js/reminders.js?v=7"></script>
-<script src="assets/js/pdf-report.js?v=7"></script>
-<script src="assets/js/app.js?v=7"></script>
+<script src="assets/js/supabase-client.js?v=8"></script>
+<script src="assets/js/clients.js?v=8"></script>
+<script src="assets/js/daily-targets.js?v=8"></script>
+<script src="assets/js/booked-flow.js?v=8"></script>
+<script src="assets/js/reminders.js?v=8"></script>
+<script src="assets/js/pdf-report.js?v=8"></script>
+<script src="assets/js/app.js?v=8"></script>
 </body>
 </html>

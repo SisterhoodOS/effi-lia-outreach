@@ -11,11 +11,6 @@ Effi.dailyTargets = (function () {
     return d.toLocaleDateString('en-US', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
   }
 
-  function fmtDateShort(dateStr) {
-    const d = new Date(dateStr + 'T00:00:00');
-    return d.toLocaleDateString('en-US', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
-  }
-
   async function ensureSlotsExist(project, dateStr) {
     const existing = await Effi.db.getRows('effi_daily_targets', { project, target_date: dateStr });
     if (existing.length > 0) return existing;
@@ -38,8 +33,13 @@ Effi.dailyTargets = (function () {
   }
 
   function renderProgress() {
+    const progressEl = document.getElementById('targets-progress');
+    if (slots.length === 0) {
+      progressEl.textContent = '';
+      return;
+    }
     const done = slots.filter(s => s.done).length;
-    document.getElementById('targets-progress').textContent = `${done}/${SLOT_COUNT} done`;
+    progressEl.textContent = `${done}/${slots.length} done`;
   }
 
   const STATUS_OPTIONS = ['pending', 'contacted', 'response', 'interest', 'booked'];
@@ -65,6 +65,13 @@ Effi.dailyTargets = (function () {
 
   function renderGrid(readOnly) {
     const grid = document.getElementById('targets-grid');
+
+    if (slots.length === 0) {
+      grid.innerHTML = `<p class="targets-empty-note">No targets were logged for this date.</p>`;
+      renderProgress();
+      return;
+    }
+
     const rows = slots.sort((a, b) => a.slot_number - b.slot_number).map(s => `
       <tr class="target-row ${s.done ? 'done' : ''}" data-id="${s.id}">
         <td class="target-row-num">${s.slot_number}</td>
@@ -103,26 +110,13 @@ Effi.dailyTargets = (function () {
     renderProgress();
   }
 
-  async function loadHistoryOptions(project) {
-    const select = document.getElementById('targets-history-select');
-    const rows = await Effi.db.getRows('effi_daily_targets', { project });
-    const today = Effi.util.todayISODate();
-    const dates = new Set(rows.map(r => r.target_date));
-    dates.add(today); // always offer today, even before it's been started
-    const sorted = [...dates].sort().reverse();
-    select.innerHTML = sorted.map(d =>
-      `<option value="${d}">${d === today ? `Today — ${fmtDateShort(d)}` : fmtDateShort(d)}</option>`
-    ).join('');
-    select.value = today;
-  }
-
   async function openForDate(project, dateStr) {
     currentDate = dateStr;
     const isToday = dateStr === Effi.util.todayISODate();
     document.getElementById('targets-date-label').textContent = fmtDateLabel(dateStr);
     document.getElementById('targets-panel').hidden = false;
-    const historySelect = document.getElementById('targets-history-select');
-    if (historySelect.value !== dateStr) historySelect.value = dateStr;
+    const datePicker = document.getElementById('targets-date-picker');
+    if (datePicker.value !== dateStr) datePicker.value = dateStr;
 
     slots = isToday
       ? await ensureSlotsExist(project, dateStr)
@@ -141,7 +135,7 @@ Effi.dailyTargets = (function () {
 
   async function initForProject(project) {
     document.getElementById('targets-panel').hidden = true;
-    await loadHistoryOptions(project);
+    document.getElementById('targets-date-picker').value = Effi.util.todayISODate();
   }
 
   function wireEvents() {
@@ -149,7 +143,11 @@ Effi.dailyTargets = (function () {
       openForDate(Effi.state.activeProject, Effi.util.todayISODate());
     });
 
-    document.getElementById('targets-history-select').addEventListener('change', (e) => {
+    document.getElementById('targets-jump-today').addEventListener('click', () => {
+      openForDate(Effi.state.activeProject, Effi.util.todayISODate());
+    });
+
+    document.getElementById('targets-date-picker').addEventListener('change', (e) => {
       if (e.target.value) openForDate(Effi.state.activeProject, e.target.value);
     });
 

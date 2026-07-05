@@ -15,21 +15,7 @@
 </head>
 <body>
 
-<div id="auth-gate" class="auth-gate">
-  <div class="auth-gate-card">
-    <p class="auth-gate-eyebrow">Saha Synergy</p>
-    <h1 class="auth-gate-title">Effi Lia <span>- Outreach</span></h1>
-    <p class="auth-gate-sub">Enter the team password to get in ✨</p>
-    <input type="password" id="auth-gate-input" class="auth-gate-input" placeholder="Password" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false">
-    <label style="display:flex;align-items:center;gap:0.4rem;font-weight:400;font-size:0.8rem;margin:0.4rem 0 0.9rem;">
-      <input type="checkbox" id="auth-gate-show" style="width:auto;"> Show password
-    </label>
-    <button id="auth-gate-submit" class="btn btn-primary btn-block">Enter</button>
-    <p id="auth-gate-error" class="auth-gate-error" hidden>Wrong password, try again.</p>
-  </div>
-</div>
-
-<div id="app" class="app" hidden>
+<div id="app" class="app">
 
   <header class="app-header">
     <h1 class="app-title">Effi Lia <span>- Outreach</span></h1>
@@ -111,7 +97,6 @@
 </div>
 
 <script src="assets/js/supabase-client.js"></script>
-<script src="assets/js/auth-gate.js"></script>
 <script src="assets/js/clients.js"></script>
 <script src="assets/js/daily-targets.js"></script>
 <script src="assets/js/booked-flow.js"></script>

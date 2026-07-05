@@ -29,9 +29,5 @@
     loadProject(Effi.state.activeProject);
   }
 
-  if (document.getElementById('app').hidden === false) {
-    boot();
-  } else {
-    document.addEventListener('effi:unlocked', boot, { once: true });
-  }
+  boot();
 })();

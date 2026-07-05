@@ -20,7 +20,10 @@
     <p class="auth-gate-eyebrow">Saha Synergy</p>
     <h1 class="auth-gate-title">Effi Lia <span>- Outreach</span></h1>
     <p class="auth-gate-sub">Enter the team password to get in ✨</p>
-    <input type="password" id="auth-gate-input" class="auth-gate-input" placeholder="Password">
+    <input type="password" id="auth-gate-input" class="auth-gate-input" placeholder="Password" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false">
+    <label style="display:flex;align-items:center;gap:0.4rem;font-weight:400;font-size:0.8rem;margin:0.4rem 0 0.9rem;">
+      <input type="checkbox" id="auth-gate-show" style="width:auto;"> Show password
+    </label>
     <button id="auth-gate-submit" class="btn btn-primary btn-block">Enter</button>
     <p id="auth-gate-error" class="auth-gate-error" hidden>Wrong password, try again.</p>
   </div>

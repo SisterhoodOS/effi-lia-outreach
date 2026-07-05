@@ -12,6 +12,7 @@ const EFFI_AUTH_KEY = 'effi_lia_auth_ok';
   const input = document.getElementById('auth-gate-input');
   const submit = document.getElementById('auth-gate-submit');
   const errorEl = document.getElementById('auth-gate-error');
+  const showToggle = document.getElementById('auth-gate-show');
 
   function unlock() {
     gate.hidden = true;
@@ -20,13 +21,24 @@ const EFFI_AUTH_KEY = 'effi_lia_auth_ok';
   }
 
   function tryUnlock() {
-    if (input.value === EFFI_PASSWORD) {
-      localStorage.setItem(EFFI_AUTH_KEY, '1');
-      errorEl.hidden = true;
-      unlock();
-    } else {
-      errorEl.hidden = false;
+    try {
+      if (input.value.trim() === EFFI_PASSWORD) {
+        localStorage.setItem(EFFI_AUTH_KEY, '1');
+        errorEl.hidden = true;
+        unlock();
+      } else {
+        errorEl.hidden = false;
+      }
+    } catch (e) {
+      console.error('Effi auth-gate error', e);
+      alert('Something went wrong unlocking the page: ' + e.message);
     }
+  }
+
+  if (showToggle) {
+    showToggle.addEventListener('change', () => {
+      input.type = showToggle.checked ? 'text' : 'password';
+    });
   }
 
   if (localStorage.getItem(EFFI_AUTH_KEY) === '1') {

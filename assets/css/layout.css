@@ -1,7 +1,11 @@
 * { box-sizing: border-box; }
 
-body {
+html, body {
   margin: 0;
+  overflow-x: hidden;
+  max-width: 100%;
+}
+body {
   font-family: var(--font-body);
   background: linear-gradient(180deg, var(--blush-50), var(--pink-100) 60%);
   color: var(--ink);
@@ -122,6 +126,7 @@ body {
 }
 .targets-grid {
   overflow-x: auto;
+  max-width: 100%;
   border-radius: var(--radius-md);
   border: 1px solid var(--pink-100);
 }
@@ -132,7 +137,6 @@ body {
   flex-wrap: wrap;
   margin-bottom: 1.25rem;
 }
-.clients-list { display: flex; flex-direction: column; gap: 0.75rem; }
 .clients-empty {
   text-align: center;
   color: var(--ink-soft);
@@ -179,4 +183,8 @@ body {
 @media (max-width: 640px) {
   .app { padding: 1rem 0.75rem 3rem; }
   .app-header { flex-wrap: wrap; gap: 0.75rem; }
+  .app-title { font-size: 1.4rem; }
+  .targets-section, .clients-section { padding: 1rem; }
+  .clients-toolbar, .targets-header { gap: 0.5rem; }
+  .clients-search, .clients-status-filter { min-width: 0; flex: 1 1 45%; }
 }

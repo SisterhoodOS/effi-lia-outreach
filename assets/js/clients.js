@@ -58,7 +58,9 @@ Effi.clients = (function () {
         <td>
           <select class="client-status-select status-select-${c.status}" data-id="${c.id}">${statusOptionsHtml(c.status)}</select>
         </td>
-        <td>${PLATFORM_LABELS[c.source] || Effi.util.escapeHtml(c.source || '-')}</td>
+        <td>
+          <select class="client-platform-select" data-id="${c.id}"><option value="">-</option>${platformOptionsHtml(c.source)}</select>
+        </td>
         <td>${c.profile_link ? `<a href="${Effi.util.escapeHtml(c.profile_link)}" target="_blank" rel="noopener">View profile</a>` : '-'}</td>
         <td class="ct-notes">${c.note ? Effi.util.escapeHtml(c.note) : '-'}</td>
         <td class="ct-actions">
@@ -168,9 +170,16 @@ Effi.clients = (function () {
     document.getElementById('clients-search').addEventListener('input', render);
     document.getElementById('clients-status-filter').addEventListener('change', render);
 
-    document.getElementById('clients-list').addEventListener('change', (e) => {
+    document.getElementById('clients-list').addEventListener('change', async (e) => {
       if (e.target.classList.contains('client-status-select')) {
         handleStatusChange(e.target.dataset.id, e.target.value);
+        return;
+      }
+      if (e.target.classList.contains('client-platform-select')) {
+        const id = e.target.dataset.id;
+        await Effi.db.updateRow('effi_clients', id, { source: e.target.value });
+        const row = rows.find(r => r.id === id);
+        if (row) row.source = e.target.value;
       }
     });
 

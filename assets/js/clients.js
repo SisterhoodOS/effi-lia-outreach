@@ -1,13 +1,14 @@
 // Effi Lia - Outreach — client tracker: list, add/edit, status pipeline.
 
 Effi.clients = (function () {
-  const STATUSES = ['no_response', 'response', 'interest', 'not_interest', 'booked'];
+  const STATUSES = ['no_response', 'response', 'interest', 'not_interest', 'booked', 'canceled'];
   const STATUS_LABELS = {
     no_response: 'No Response',
     response: 'Response',
     interest: 'Interest',
     not_interest: 'Not Interest',
-    booked: 'Booked'
+    booked: 'Booked',
+    canceled: 'Canceled'
   };
 
   const PLATFORMS = Effi.PLATFORMS;
@@ -64,7 +65,7 @@ Effi.clients = (function () {
         <td>${c.profile_link ? `<a href="${Effi.util.escapeHtml(c.profile_link)}" target="_blank" rel="noopener">View profile</a>` : '-'}</td>
         <td class="ct-notes">${c.note ? Effi.util.escapeHtml(c.note) : '-'}</td>
         <td class="ct-actions">
-          ${c.status === 'booked' ? `<button class="btn btn-ghost btn-sm client-view-detail" data-id="${c.id}">View Detail</button>` : ''}
+          ${(c.status === 'booked' || c.status === 'canceled') ? `<button class="btn btn-ghost btn-sm client-view-detail" data-id="${c.id}">View Detail</button>` : ''}
           <button class="btn btn-ghost btn-sm client-edit" data-id="${c.id}">Edit</button>
         </td>
       </tr>

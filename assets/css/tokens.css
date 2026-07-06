@@ -19,6 +19,8 @@
   --status-not-interest-fg: #9c6b78;
   --status-booked-bg: var(--maroon-900);
   --status-booked-fg: #fff8fa;
+  --status-canceled-bg: #e8e0e2;
+  --status-canceled-fg: #8a7378;
 
   --font-display: 'Fraunces', Georgia, serif;
   --font-body: 'Quicksand', 'Trebuchet MS', sans-serif;

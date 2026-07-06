@@ -7,7 +7,6 @@ Effi.dailyTargets = (function () {
   let saveTimers = {};
   let sessionStartedAt = null;
   let sessionFinishedAt = null;
-  let timerInterval = null;
 
   function fmtDateLabel(dateStr) {
     const d = new Date(dateStr + 'T00:00:00');
@@ -20,22 +19,6 @@ Effi.dailyTargets = (function () {
     const m = Math.floor((totalSeconds % 3600) / 60);
     const s = totalSeconds % 60;
     return h > 0 ? `${h}h ${m}m ${s}s` : `${m}m ${s}s`;
-  }
-
-  function stopTimer() {
-    if (timerInterval) clearInterval(timerInterval);
-    timerInterval = null;
-  }
-
-  function startTimer() {
-    stopTimer();
-    const timerEl = document.getElementById('targets-timer');
-    timerEl.hidden = false;
-    const tick = () => {
-      timerEl.textContent = `⏱ ${fmtElapsed(Date.now() - sessionStartedAt.getTime())}`;
-    };
-    tick();
-    timerInterval = setInterval(tick, 1000);
   }
 
   async function loadOrCreateSession(project, dateStr) {
@@ -165,13 +148,10 @@ Effi.dailyTargets = (function () {
       ? await ensureSlotsExist(project, dateStr)
       : await Effi.db.getRows('effi_daily_targets', { project, target_date: dateStr });
 
-    stopTimer();
-    const timerEl = document.getElementById('targets-timer');
     const finishBtn = document.getElementById('targets-finish-btn');
     const completedBadge = document.getElementById('targets-completed-badge');
 
     if (!isToday) {
-      timerEl.hidden = true;
       finishBtn.hidden = true;
       completedBadge.hidden = true;
       document.getElementById('targets-readonly-badge').hidden = false;
@@ -183,7 +163,6 @@ Effi.dailyTargets = (function () {
     await loadOrCreateSession(project, dateStr);
 
     if (sessionFinishedAt) {
-      timerEl.hidden = true;
       finishBtn.hidden = true;
       completedBadge.hidden = false;
       completedBadge.textContent = `✅ Day completed in ${fmtElapsed(sessionFinishedAt.getTime() - sessionStartedAt.getTime())}`;
@@ -192,7 +171,6 @@ Effi.dailyTargets = (function () {
       completedBadge.hidden = true;
       finishBtn.hidden = false;
       renderGrid(false);
-      startTimer();
     }
   }
 
@@ -209,8 +187,6 @@ Effi.dailyTargets = (function () {
     }
     // If effi_daily_sessions doesn't exist yet, the above is a no-op — the
     // "completed" state below still applies for this tab/session.
-    stopTimer();
-    document.getElementById('targets-timer').hidden = true;
     document.getElementById('targets-finish-btn').hidden = true;
     const completedBadge = document.getElementById('targets-completed-badge');
     completedBadge.hidden = false;
@@ -226,7 +202,6 @@ Effi.dailyTargets = (function () {
   }
 
   async function initForProject(project) {
-    stopTimer();
     document.getElementById('targets-panel').hidden = true;
     document.getElementById('targets-date-picker').value = Effi.util.todayISODate();
   }

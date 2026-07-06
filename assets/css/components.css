@@ -74,11 +74,13 @@ label { font-weight: 600; font-size: 0.82rem; color: var(--maroon-700); display:
 .status-interest { background: var(--status-interest-bg); color: var(--status-interest-fg); }
 .status-not_interest { background: var(--status-not-interest-bg); color: var(--status-not-interest-fg); text-decoration: line-through; }
 .status-booked { background: var(--status-booked-bg); color: var(--status-booked-fg); }
+.status-canceled { background: var(--status-canceled-bg); color: var(--status-canceled-fg); text-decoration: line-through; }
 .status-select-no_response { background: var(--status-no-response-bg); color: var(--status-no-response-fg); }
 .status-select-response { background: var(--status-response-bg); color: var(--status-response-fg); }
 .status-select-interest { background: var(--status-interest-bg); color: var(--status-interest-fg); }
 .status-select-not_interest { background: var(--status-not-interest-bg); color: var(--status-not-interest-fg); }
 .status-select-booked { background: var(--status-booked-bg); color: var(--status-booked-fg); }
+.status-select-canceled { background: var(--status-canceled-bg); color: var(--status-canceled-fg); }
 
 /* ── Clients table ─────────────────────────────────────── */
 .clients-list { overflow-x: auto; max-width: 100%; border-radius: var(--radius-md); border: 1px solid var(--pink-100); }
@@ -216,15 +218,6 @@ label { font-weight: 600; font-size: 0.82rem; color: var(--maroon-700); display:
   background: var(--pink-100);
   padding: 0.25rem 0.7rem;
   border-radius: 999px;
-}
-.targets-timer {
-  font-size: 0.78rem;
-  font-weight: 700;
-  color: var(--purple-500);
-  background: var(--purple-200);
-  padding: 0.25rem 0.7rem;
-  border-radius: 999px;
-  font-variant-numeric: tabular-nums;
 }
 .targets-completed-badge {
   font-size: 0.78rem;

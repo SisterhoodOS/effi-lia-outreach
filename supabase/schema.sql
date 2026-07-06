@@ -15,10 +15,10 @@
 --   alter table effi_daily_targets add column if not exists profile_link text;
 --   alter table effi_daily_targets add column if not exists notes text;
 --
--- Also new as of 2026-07-06: the `effi_daily_sessions` table (tracks work
--- duration + the "Finish Day" completion gate). It's a brand new table, so
--- if you don't want to re-paste this whole file, just running the whole
--- file again is easiest — every statement here is safe to re-run.
+-- Also new as of 2026-07-06: the `effi_daily_sessions` table (tracks the
+-- "Finish Day" completion gate), and a new "canceled" client status. It's
+-- safe to just paste and run this whole file again in full — every
+-- statement here is idempotent.
 
 create table if not exists effi_clients (
   id uuid primary key default gen_random_uuid(),
@@ -27,7 +27,7 @@ create table if not exists effi_clients (
   source text,
   profile_link text,
   status text not null default 'no_response'
-    check (status in ('no_response','response','interest','not_interest','booked')),
+    check (status in ('no_response','response','interest','not_interest','booked','canceled')),
   note text,
   handled_by text,
   meeting_at timestamptz,
@@ -39,6 +39,12 @@ create table if not exists effi_clients (
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
+
+-- Adds "canceled" to the allowed statuses if effi_clients already existed
+-- from an earlier run of this script without it.
+alter table effi_clients drop constraint if exists effi_clients_status_check;
+alter table effi_clients add constraint effi_clients_status_check
+  check (status in ('no_response','response','interest','not_interest','booked','canceled'));
 
 create table if not exists effi_daily_targets (
   id uuid primary key default gen_random_uuid(),

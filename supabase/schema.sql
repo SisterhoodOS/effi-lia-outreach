@@ -16,9 +16,10 @@
 --   alter table effi_daily_targets add column if not exists notes text;
 --
 -- Also new as of 2026-07-06: the `effi_daily_sessions` table (tracks the
--- "Finish Day" completion gate), and a new "canceled" client status. It's
--- safe to just paste and run this whole file again in full — every
--- statement here is idempotent.
+-- "Finish Day" completion gate), a new "canceled" client status, and a fix
+-- for reminder messages showing UTC time instead of WITA. It's safe to just
+-- paste and run this whole file again in full — every statement here is
+-- idempotent (re-running it will not duplicate data or break anything).
 
 create table if not exists effi_clients (
   id uuid primary key default gen_random_uuid(),
@@ -136,7 +137,7 @@ select cron.schedule(
   select c.project, c.id, 'team', 'reminder_6h',
     replace(replace(
       (select body from effi_templates where kind = 'client_6h' and (project is null or project = c.project) order by project nulls last limit 1),
-      '{{name}}', c.name), '{{time}}', to_char(c.meeting_at, 'HH24:MI'))
+      '{{name}}', c.name), '{{time}}', to_char(c.meeting_at AT TIME ZONE 'Asia/Makassar', 'HH24:MI'))
   from effi_clients c
   where c.status = 'booked' and c.meeting_at is not null
     and c.meeting_at - now() between interval '5 hours 45 min' and interval '6 hours 15 min'
@@ -145,7 +146,7 @@ select cron.schedule(
   select c.project, c.id, 'sophia', 'reminder_6h',
     replace(replace(replace(
       (select body from effi_templates where kind = 'sophia_6h' and (project is null or project = c.project) order by project nulls last limit 1),
-      '{{name}}', c.name), '{{time}}', to_char(c.meeting_at, 'HH24:MI')), '{{project}}', c.project)
+      '{{name}}', c.name), '{{time}}', to_char(c.meeting_at AT TIME ZONE 'Asia/Makassar', 'HH24:MI')), '{{project}}', c.project)
   from effi_clients c
   where c.status = 'booked' and c.meeting_at is not null
     and c.meeting_at - now() between interval '5 hours 45 min' and interval '6 hours 15 min'
@@ -154,7 +155,7 @@ select cron.schedule(
   select c.project, c.id, 'team', 'reminder_1h',
     replace(replace(
       (select body from effi_templates where kind = 'client_1h' and (project is null or project = c.project) order by project nulls last limit 1),
-      '{{name}}', c.name), '{{time}}', to_char(c.meeting_at, 'HH24:MI'))
+      '{{name}}', c.name), '{{time}}', to_char(c.meeting_at AT TIME ZONE 'Asia/Makassar', 'HH24:MI'))
   from effi_clients c
   where c.status = 'booked' and c.meeting_at is not null
     and c.meeting_at - now() between interval '45 min' and interval '1 hour 15 min'

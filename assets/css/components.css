@@ -217,6 +217,23 @@ label { font-weight: 600; font-size: 0.82rem; color: var(--maroon-700); display:
   padding: 0.25rem 0.7rem;
   border-radius: 999px;
 }
+.targets-timer {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--purple-500);
+  background: var(--purple-200);
+  padding: 0.25rem 0.7rem;
+  border-radius: 999px;
+  font-variant-numeric: tabular-nums;
+}
+.targets-completed-badge {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #fff8fa;
+  background: var(--maroon-900);
+  padding: 0.25rem 0.7rem;
+  border-radius: 999px;
+}
 .targets-date-picker {
   border: 1px solid var(--purple-200);
   border-radius: var(--radius-sm);

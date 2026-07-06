@@ -14,6 +14,11 @@
 --   alter table effi_daily_targets add column if not exists platform text;
 --   alter table effi_daily_targets add column if not exists profile_link text;
 --   alter table effi_daily_targets add column if not exists notes text;
+--
+-- Also new as of 2026-07-06: the `effi_daily_sessions` table (tracks work
+-- duration + the "Finish Day" completion gate). It's a brand new table, so
+-- if you don't want to re-paste this whole file, just running the whole
+-- file again is easiest — every statement here is safe to re-run.
 
 create table if not exists effi_clients (
   id uuid primary key default gen_random_uuid(),
@@ -50,6 +55,19 @@ create table if not exists effi_daily_targets (
   created_at timestamptz not null default now(),
   unique (project, target_date, slot_number)
 );
+
+create table if not exists effi_daily_sessions (
+  id uuid primary key default gen_random_uuid(),
+  project text not null check (project in ('saha_synergy','bwb','bfp')),
+  target_date date not null,
+  started_at timestamptz not null default now(),
+  finished_at timestamptz,
+  unique (project, target_date)
+);
+
+alter table effi_daily_sessions enable row level security;
+drop policy if exists "anon full access" on effi_daily_sessions;
+create policy "anon full access" on effi_daily_sessions for all using (true) with check (true);
 
 create table if not exists effi_notifications (
   id uuid primary key default gen_random_uuid(),

@@ -5,10 +5,53 @@ Effi.dailyTargets = (function () {
   let currentDate = null;
   let slots = [];
   let saveTimers = {};
+  let sessionStartedAt = null;
+  let sessionFinishedAt = null;
+  let timerInterval = null;
 
   function fmtDateLabel(dateStr) {
     const d = new Date(dateStr + 'T00:00:00');
     return d.toLocaleDateString('en-US', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+  }
+
+  function fmtElapsed(ms) {
+    const totalSeconds = Math.max(0, Math.floor(ms / 1000));
+    const h = Math.floor(totalSeconds / 3600);
+    const m = Math.floor((totalSeconds % 3600) / 60);
+    const s = totalSeconds % 60;
+    return h > 0 ? `${h}h ${m}m ${s}s` : `${m}m ${s}s`;
+  }
+
+  function stopTimer() {
+    if (timerInterval) clearInterval(timerInterval);
+    timerInterval = null;
+  }
+
+  function startTimer() {
+    stopTimer();
+    const timerEl = document.getElementById('targets-timer');
+    timerEl.hidden = false;
+    const tick = () => {
+      timerEl.textContent = `⏱ ${fmtElapsed(Date.now() - sessionStartedAt.getTime())}`;
+    };
+    tick();
+    timerInterval = setInterval(tick, 1000);
+  }
+
+  async function loadOrCreateSession(project, dateStr) {
+    sessionStartedAt = null;
+    sessionFinishedAt = null;
+    const existing = await Effi.db.getRows('effi_daily_sessions', { project, target_date: dateStr });
+    if (existing.length > 0) {
+      sessionStartedAt = new Date(existing[0].started_at);
+      sessionFinishedAt = existing[0].finished_at ? new Date(existing[0].finished_at) : null;
+      return;
+    }
+    // If effi_daily_sessions doesn't exist yet (optional schema addition),
+    // insertRow fails silently and returns null — fall back to an
+    // in-memory-only timer for this tab so the feature still works.
+    const created = await Effi.db.insertRow('effi_daily_sessions', { project, target_date: dateStr });
+    sessionStartedAt = created ? new Date(created.started_at) : new Date();
   }
 
   async function ensureSlotsExist(project, dateStr) {
@@ -122,8 +165,57 @@ Effi.dailyTargets = (function () {
       ? await ensureSlotsExist(project, dateStr)
       : await Effi.db.getRows('effi_daily_targets', { project, target_date: dateStr });
 
-    renderGrid(!isToday);
-    document.getElementById('targets-readonly-badge').hidden = isToday;
+    stopTimer();
+    const timerEl = document.getElementById('targets-timer');
+    const finishBtn = document.getElementById('targets-finish-btn');
+    const completedBadge = document.getElementById('targets-completed-badge');
+
+    if (!isToday) {
+      timerEl.hidden = true;
+      finishBtn.hidden = true;
+      completedBadge.hidden = true;
+      document.getElementById('targets-readonly-badge').hidden = false;
+      renderGrid(true);
+      return;
+    }
+
+    document.getElementById('targets-readonly-badge').hidden = true;
+    await loadOrCreateSession(project, dateStr);
+
+    if (sessionFinishedAt) {
+      timerEl.hidden = true;
+      finishBtn.hidden = true;
+      completedBadge.hidden = false;
+      completedBadge.textContent = `✅ Day completed in ${fmtElapsed(sessionFinishedAt.getTime() - sessionStartedAt.getTime())}`;
+      renderGrid(true);
+    } else {
+      completedBadge.hidden = true;
+      finishBtn.hidden = false;
+      renderGrid(false);
+      startTimer();
+    }
+  }
+
+  async function handleFinishDay(project, dateStr) {
+    const emptyCount = slots.filter(s => !s.client_name || !s.client_name.trim()).length;
+    if (emptyCount > 0) {
+      alert(`You still have ${emptyCount} empty target${emptyCount === 1 ? '' : 's'} out of ${slots.length}. Fill in all targets before finishing the day.`);
+      return;
+    }
+    sessionFinishedAt = new Date();
+    const existing = await Effi.db.getRows('effi_daily_sessions', { project, target_date: dateStr });
+    if (existing.length > 0) {
+      await Effi.db.updateRow('effi_daily_sessions', existing[0].id, { finished_at: sessionFinishedAt.toISOString() });
+    }
+    // If effi_daily_sessions doesn't exist yet, the above is a no-op — the
+    // "completed" state below still applies for this tab/session.
+    stopTimer();
+    document.getElementById('targets-timer').hidden = true;
+    document.getElementById('targets-finish-btn').hidden = true;
+    const completedBadge = document.getElementById('targets-completed-badge');
+    completedBadge.hidden = false;
+    completedBadge.textContent = `✅ Day completed in ${fmtElapsed(sessionFinishedAt.getTime() - sessionStartedAt.getTime())}`;
+    renderGrid(true);
   }
 
   function debouncedSave(id, patch) {
@@ -134,6 +226,7 @@ Effi.dailyTargets = (function () {
   }
 
   async function initForProject(project) {
+    stopTimer();
     document.getElementById('targets-panel').hidden = true;
     document.getElementById('targets-date-picker').value = Effi.util.todayISODate();
   }
@@ -149,6 +242,10 @@ Effi.dailyTargets = (function () {
 
     document.getElementById('targets-date-picker').addEventListener('change', (e) => {
       if (e.target.value) openForDate(Effi.state.activeProject, e.target.value);
+    });
+
+    document.getElementById('targets-finish-btn').addEventListener('click', () => {
+      handleFinishDay(Effi.state.activeProject, currentDate);
     });
 
     const FIELD_BY_CLASS = {
